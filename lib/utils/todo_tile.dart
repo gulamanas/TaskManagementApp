@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:task_management_app/utils/dialog_box.dart';
 
-class TodoTile extends StatelessWidget {
+class TodoTile extends StatefulWidget {
   final String taskName;
   final bool taskCompleted;
   Function(bool?)? onChanged;
@@ -15,7 +16,23 @@ class TodoTile extends StatelessWidget {
   });
 
   @override
+  State<TodoTile> createState() => _TodoTileState();
+}
+
+class _TodoTileState extends State<TodoTile> {
+  final _controller = TextEditingController();
+
+  void onCancel() {
+    Navigator.of(context).pop();
+  }
+
+  void updateTodoData() {
+    Navigator.of(context).pop();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _controller.text = widget.taskName;
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
       child: Container(
@@ -30,8 +47,8 @@ class TodoTile extends StatelessWidget {
             Row(
               children: [
                 Checkbox(
-                  value: taskCompleted,
-                  onChanged: onChanged,
+                  value: widget.taskCompleted,
+                  onChanged: widget.onChanged,
                   activeColor: Colors.black,
                 ),
                 InkWell(
@@ -39,17 +56,22 @@ class TodoTile extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return AlertDialog(
-                            content: Text(taskName),
-                            actions: [Text('data')],
+                          return DialogBox(
+                            controller: _controller,
+                            onCancel: onCancel,
+                            onSave: updateTodoData,
                           );
+                          // return AlertDialog(
+                          //   content: Text(taskName),
+                          //   actions: [Text('data')],
+                          // );
                         });
                   },
                   child: Text(
-                    taskName,
+                    widget.taskName,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      decoration: taskCompleted
+                      decoration: widget.taskCompleted
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
                     ),
@@ -58,7 +80,7 @@ class TodoTile extends StatelessWidget {
               ],
             ),
             IconButton(
-              onPressed: onDelete,
+              onPressed: widget.onDelete,
               icon: const Icon(
                 Icons.delete,
                 color: Colors.red,

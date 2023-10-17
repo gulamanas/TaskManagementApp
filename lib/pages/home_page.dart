@@ -1,12 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_management_app/data/database.dart';
 import 'package:task_management_app/utils/dialog_box.dart';
 import 'package:task_management_app/utils/todo_tile.dart';
-import 'package:task_management_app/utils/todo_shared_preff.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,13 +15,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    // if this is the 1st time ever opening the app
-    // if (_myBox.get('TODOLIST') == null) {
-    //   db.createInitialData();
-    // } else {
-    //   // there already exists data
-    //   db.loadData();
-    // }
     getAllData();
     super.initState();
   }
@@ -33,23 +23,16 @@ class _HomePageState extends State<HomePage> {
     // ["Make Tutorial", false],
     // ["Do Exercises", false],
   ];
-  // reference the hive box
-  // final _myBox = Hive.box('mybox');
 
-  // text controller
   final _controller = TextEditingController();
-
-  // * TodoDatabase db = TodoDatabase();
 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
       todoList[index][1] = !todoList[index][1];
     });
     saveTaskLocally();
-    // db.updateDataBase();
   }
 
-  // save new task
   void saveNewTask() {
     saveTaskLocally();
 
@@ -58,10 +41,8 @@ class _HomePageState extends State<HomePage> {
       _controller.clear();
     });
     Navigator.of(context).pop();
-    // db.updateDataBase();
   }
 
-  // create a new task
   void createNewTask() {
     showDialog(
         context: context,
@@ -82,11 +63,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   void deleteTask(int index) {
-    setState(() {
-      todoList.removeAt(index);
-    });
-    saveTaskLocally();
-    // db.updateDataBase();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.yellow[300],
+            content: const Text('Confirm Delete this Task?'),
+            actions: [
+              Container(
+                decoration: const BoxDecoration(color: Colors.white),
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      todoList.removeAt(index);
+                    });
+                    saveTaskLocally();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Yes',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              Container(
+                decoration: const BoxDecoration(color: Colors.white),
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text(
+                    'No',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   @override
