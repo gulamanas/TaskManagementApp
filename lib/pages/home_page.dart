@@ -19,38 +19,46 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // if this is the 1st time ever opening the app
-    if (_myBox.get('TODOLIST') == null) {
-      db.createInitialData();
-    } else {
-      // there already exists data
-      db.loadData();
-    }
+    // if (_myBox.get('TODOLIST') == null) {
+    //   db.createInitialData();
+    // } else {
+    //   // there already exists data
+    //   db.loadData();
+    // }
+    getAllData();
     super.initState();
   }
 
+  List todoList = [
+    // ["Make Tutorial", false],
+    // ["Do Exercises", false],
+  ];
   // reference the hive box
-  final _myBox = Hive.box('mybox');
+  // final _myBox = Hive.box('mybox');
 
   // text controller
   final _controller = TextEditingController();
 
-  TodoDatabase db = TodoDatabase();
+  // * TodoDatabase db = TodoDatabase();
 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
-      db.todoList[index][1] = !db.todoList[index][1];
+      todoList[index][1] = !todoList[index][1];
     });
-    db.updateDataBase();
+    saveTaskLocally();
+    // db.updateDataBase();
   }
 
   // save new task
   void saveNewTask() {
+    saveTaskLocally();
+
     setState(() {
-      db.todoList.add([_controller.text, false]);
+      todoList.add([_controller.text, false]);
       _controller.clear();
     });
     Navigator.of(context).pop();
-    db.updateDataBase();
+    // db.updateDataBase();
   }
 
   // create a new task
@@ -66,11 +74,19 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
+  void saveTaskLocally() async {
+    var prefs = await SharedPreferences.getInstance();
+    String jsonTodoList = jsonEncode(todoList);
+
+    prefs.setString('todoList', jsonTodoList);
+  }
+
   void deleteTask(int index) {
     setState(() {
-      db.todoList.removeAt(index);
+      todoList.removeAt(index);
     });
-    db.updateDataBase();
+    saveTaskLocally();
+    // db.updateDataBase();
   }
 
   @override
@@ -89,14 +105,25 @@ class _HomePageState extends State<HomePage> {
       body: ListView.builder(
         itemBuilder: (context, index) {
           return TodoTile(
-            taskName: db.todoList[index][0],
-            taskCompleted: db.todoList[index][1],
+            taskName: todoList[index][0],
+            taskCompleted: todoList[index][1],
             onChanged: (value) => checkBoxChanged(value, index),
             onDelete: () => deleteTask(index),
           );
         },
-        itemCount: db.todoList.length,
+        itemCount: todoList.length,
       ),
     );
+  }
+
+  void getAllData() async {
+    var prefs = await SharedPreferences.getInstance();
+    String jsonTodoList = prefs.getString('todoList') ?? "";
+
+    var prefstodoList = jsonDecode(jsonTodoList);
+
+    setState(() {
+      todoList = prefstodoList ?? [];
+    });
   }
 }

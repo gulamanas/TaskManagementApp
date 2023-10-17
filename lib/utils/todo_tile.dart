@@ -17,29 +17,53 @@ class TodoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.yellow,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Checkbox(
-              value: taskCompleted,
-              onChanged: onChanged,
-              activeColor: Colors.black,
+            Row(
+              children: [
+                Checkbox(
+                  value: taskCompleted,
+                  onChanged: onChanged,
+                  activeColor: Colors.black,
+                ),
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text(taskName),
+                            actions: [Text('data')],
+                          );
+                        });
+                  },
+                  child: Text(
+                    taskName,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Text(
-              taskName,
-              style: TextStyle(
-                decoration: taskCompleted
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
+            IconButton(
+              onPressed: onDelete,
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.red,
               ),
             ),
-            IconButton(onPressed: onDelete, icon: const Icon(Icons.delete))
           ],
         ),
       ),
