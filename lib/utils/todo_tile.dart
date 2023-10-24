@@ -60,22 +60,8 @@ class _TodoTileState extends State<TodoTile> {
                   onChanged: widget.onChanged,
                   activeColor: Colors.black,
                 ),
-                InkWell(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return DialogBox(
-                            controller: _controller,
-                            onCancel: onCancel,
-                            onSave: updateTodoData,
-                          );
-                          // return AlertDialog(
-                          //   content: Text(taskName),
-                          //   actions: [Text('data')],
-                          // );
-                        });
-                  },
+                SizedBox(
+                  width: 180.0,
                   child: Text(
                     widget.taskName,
                     overflow: TextOverflow.ellipsis,
@@ -88,12 +74,31 @@ class _TodoTileState extends State<TodoTile> {
                 ),
               ],
             ),
-            IconButton(
-              onPressed: widget.onDelete,
-              icon: const Icon(
-                Icons.delete,
-                color: Colors.red,
-              ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return DialogBox(
+                          controller: _controller,
+                          onCancel: onCancel,
+                          onSave: updateTodoData,
+                        );
+                      }),
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.blue[400],
+                  ),
+                ),
+                IconButton(
+                  onPressed: widget.onDelete,
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
