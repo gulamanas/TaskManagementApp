@@ -6,6 +6,7 @@ class TodoTile extends StatefulWidget {
   final bool taskCompleted;
   Function(bool?)? onChanged;
   VoidCallback onDelete;
+  Function onUpdate;
 
   TodoTile({
     super.key,
@@ -13,6 +14,7 @@ class TodoTile extends StatefulWidget {
     required this.taskCompleted,
     required this.onChanged,
     required this.onDelete,
+    required this.onUpdate,
   });
 
   @override
@@ -28,11 +30,18 @@ class _TodoTileState extends State<TodoTile> {
 
   void updateTodoData() {
     Navigator.of(context).pop();
+    widget.onUpdate(_controller.text);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _controller.text = widget.taskName;
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = widget.taskName;
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
       child: Container(

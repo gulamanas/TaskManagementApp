@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   List todoList = [
-    // ["Make Tutorial", false],
+    // ["Remove Dummy Tasks", false],
     // ["Do Exercises", false],
   ];
 
@@ -121,6 +121,8 @@ class _HomePageState extends State<HomePage> {
             taskCompleted: todoList[index][1],
             onChanged: (value) => checkBoxChanged(value, index),
             onDelete: () => deleteTask(index),
+            onUpdate: (value) => updateTodoList(index, value),
+            // controller: _controller,
           );
         },
         itemCount: todoList.length,
@@ -130,12 +132,19 @@ class _HomePageState extends State<HomePage> {
 
   void getAllData() async {
     var prefs = await SharedPreferences.getInstance();
-    String jsonTodoList = prefs.getString('todoList') ?? "";
-
+    String? jsonTodoList =
+        prefs.getString('todoList') ?? '[["Remove this dummy Tasks", false]]';
     var prefstodoList = jsonDecode(jsonTodoList);
 
     setState(() {
       todoList = prefstodoList ?? [];
     });
+  }
+
+  updateTodoList(int index, String value) {
+    setState(() {
+      todoList[index][0] = value;
+    });
+    saveTaskLocally();
   }
 }
