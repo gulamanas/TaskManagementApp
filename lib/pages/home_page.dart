@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_management_app/data/tasks.dart';
+import 'package:task_management_app/pages/all_tasks_tab.dart';
+import 'package:task_management_app/pages/finished_tasks_tab.dart';
+import 'package:task_management_app/pages/unfinished_tasks_tab.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
 import 'package:task_management_app/utils/create_task_dialog.dart';
-import 'package:task_management_app/utils/delete_task_dialog.dart';
-import 'package:task_management_app/utils/edit_task_dialog.dart';
-import 'package:task_management_app/utils/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +14,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
+  final List<Widget> _tabs = const [
+    AllTasksTab(),
+    FinishedTasksTab(),
+    UnfinishedTasksTab(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,26 +40,18 @@ class _HomePageState extends State<HomePage> {
         },
         child: const Icon(Icons.add),
       ),
-      body: Consumer<TasksProvider>(
-        builder: (context, value, child) {
-          final tasks = value.tasks;
-          return ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: ((context, index) {
-              final task = tasks[index];
-              return TodoTile(
-                taskId: task.id,
-                isCompleted: task.completed,
-                title: task.title,
-                onEditPressed: () {
-                  updateTaskTitle(context, task);
-                },
-                onDeletePressed: () {
-                  deleteTask(context, task);
-                },
-              );
-            }),
-          );
+      body: _tabs[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'All Tasks'),
+          BottomNavigationBarItem(icon: Icon(Icons.done), label: 'Finished'),
+          BottomNavigationBarItem(icon: Icon(Icons.close), label: 'Unfinished'),
+        ],
+        currentIndex: _currentIndex,
+        onTap: (value) {
+          setState(() {
+            _currentIndex = value;
+          });
         },
       ),
     );
@@ -67,24 +66,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<dynamic> deleteTask(BuildContext context, Tasks task) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return DeleteTaskDialog(taskId: task.id);
-      },
-    );
-  }
-
-  Future<dynamic> updateTaskTitle(BuildContext context, Tasks task) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return EditTaskDialog(
-          taskId: task.id,
-          currentTitle: task.title,
-        );
-      },
-    );
-  }
+  // Future<dynamic> updateTaskTitle(BuildContext context, Tasks task) {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return EditTaskDialog(
+  //         taskId: task.id,
+  //         currentTitle: task.title,
+  //       );
+  //     },
+  //   );
+  // }
 }
