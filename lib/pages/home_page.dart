@@ -1,8 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_management_app/utils/dialog_box.dart';
+import 'package:provider/provider.dart';
+import 'package:task_management_app/data/notes.dart';
+import 'package:task_management_app/providers/notes_provider.dart';
+import 'package:task_management_app/utils/create_task_dialog.dart';
+import 'package:task_management_app/utils/delete_task_dialog.dart';
+import 'package:task_management_app/utils/edit_task_dialog.dart';
 import 'package:task_management_app/utils/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,137 +16,69 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void initState() {
-    getAllData();
-    super.initState();
-  }
-
-  List todoList = [
-    // ["Remove Dummy Tasks", false],
-    // ["Do Exercises", false],
-  ];
-
-  final _controller = TextEditingController();
-
-  void checkBoxChanged(bool? value, int index) {
-    setState(() {
-      todoList[index][1] = !todoList[index][1];
-    });
-    saveTaskLocally();
-  }
-
-  void saveNewTask() {
-    saveTaskLocally();
-
-    setState(() {
-      todoList.add([_controller.text, false]);
-      _controller.clear();
-    });
-    Navigator.of(context).pop();
-  }
-
-  void createNewTask() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return DialogBox(
-            controller: _controller,
-            onSave: saveNewTask,
-            onCancel: () => Navigator.of(context).pop(),
-          );
-        });
-  }
-
-  void saveTaskLocally() async {
-    var prefs = await SharedPreferences.getInstance();
-    String jsonTodoList = jsonEncode(todoList);
-
-    prefs.setString('todoList', jsonTodoList);
-  }
-
-  void deleteTask(int index) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.yellow[300],
-            content: const Text('Confirm Delete this Task?'),
-            actions: [
-              Container(
-                decoration: const BoxDecoration(color: Colors.white),
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      todoList.removeAt(index);
-                    });
-                    saveTaskLocally();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'Yes',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(color: Colors.white),
-                child: TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text(
-                    'No',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[200],
       appBar: AppBar(
-        title: const Text('TO DO'),
-        centerTitle: true,
-        elevation: 0,
+        title: const Text('Notes App'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: createNewTask,
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return const CreateTaskDialog();
+              }).then((newTaskTitle) {
+            if (newTaskTitle != null) {
+              Provider.of<NotesProvider>(context, listen: false)
+                  .createNewTask(newTaskTitle);
+            }
+          });
+        },
         child: const Icon(Icons.add),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return TodoTile(
-            taskName: todoList[index][0],
-            taskCompleted: todoList[index][1],
-            onChanged: (value) => checkBoxChanged(value, index),
-            onDelete: () => deleteTask(index),
-            onUpdate: (value) => updateTodoList(index, value),
-            // controller: _controller,
+      body: Consumer<NotesProvider>(
+        builder: (context, value, child) {
+          final notes = value.notes;
+          return ListView.builder(
+            itemCount: notes.length,
+            itemBuilder: ((context, index) {
+              final note = notes[index];
+              return TodoTile(
+                taskId: note.id,
+                isCompleted: note.completed,
+                title: note.title,
+                onEditPressed: () {
+                  updateTaskTitle(context, note);
+                },
+                onDeletePressed: () {
+                  deleteTask(context, note);
+                },
+              );
+            }),
           );
         },
-        itemCount: todoList.length,
       ),
     );
   }
 
-  void getAllData() async {
-    var prefs = await SharedPreferences.getInstance();
-    String? jsonTodoList =
-        prefs.getString('todoList') ?? '[["Remove this dummy Tasks", false]]';
-    var prefstodoList = jsonDecode(jsonTodoList);
-
-    setState(() {
-      todoList = prefstodoList ?? [];
-    });
+  Future<dynamic> deleteTask(BuildContext context, Notes note) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return DeleteTaskDialog(taskId: note.id);
+      },
+    );
   }
 
-  updateTodoList(int index, String value) {
-    setState(() {
-      todoList[index][0] = value;
-    });
-    saveTaskLocally();
+  Future<dynamic> updateTaskTitle(BuildContext context, Notes note) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return EditTaskDialog(
+          taskId: note.id,
+          currentTitle: note.title,
+        );
+      },
+    );
   }
 }

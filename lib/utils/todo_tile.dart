@@ -1,107 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:task_management_app/utils/dialog_box.dart';
+import 'package:provider/provider.dart';
+import 'package:task_management_app/providers/notes_provider.dart';
 
-class TodoTile extends StatefulWidget {
-  final String taskName;
-  final bool taskCompleted;
-  Function(bool?)? onChanged;
-  VoidCallback onDelete;
-  Function onUpdate;
+class TodoTile extends StatelessWidget {
+  final taskId;
+  final bool isCompleted;
+  final String title;
+  final VoidCallback onEditPressed;
+  final VoidCallback onDeletePressed;
 
   TodoTile({
     super.key,
-    required this.taskName,
-    required this.taskCompleted,
-    required this.onChanged,
-    required this.onDelete,
-    required this.onUpdate,
+    required this.taskId,
+    required this.isCompleted,
+    required this.title,
+    required this.onEditPressed,
+    required this.onDeletePressed,
   });
 
   @override
-  State<TodoTile> createState() => _TodoTileState();
-}
-
-class _TodoTileState extends State<TodoTile> {
-  final _controller = TextEditingController();
-
-  void onCancel() {
-    Navigator.of(context).pop();
-  }
-
-  void updateTodoData() {
-    Navigator.of(context).pop();
-    widget.onUpdate(_controller.text);
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    _controller.text = widget.taskName;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.yellow,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Checkbox(
-                  value: widget.taskCompleted,
-                  onChanged: widget.onChanged,
-                  activeColor: Colors.black,
-                ),
-                SizedBox(
-                  width: 180.0,
-                  child: Text(
-                    widget.taskName,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      decoration: widget.taskCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) {
-                        return DialogBox(
-                          controller: _controller,
-                          onCancel: onCancel,
-                          onSave: updateTodoData,
-                        );
-                      }),
-                  icon: Icon(
-                    Icons.edit,
-                    color: Colors.blue[400],
-                  ),
-                ),
-                IconButton(
-                  onPressed: widget.onDelete,
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+    return ListTile(
+      leading: Checkbox(
+        value: isCompleted,
+        onChanged: (value) {
+          final notesProvider =
+              Provider.of<NotesProvider>(context, listen: false);
+          notesProvider.toggleTaskCompletion(taskId);
+        },
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+            decoration: isCompleted ? TextDecoration.lineThrough : null),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: onEditPressed,
+            icon: const Icon(Icons.edit),
+          ),
+          IconButton(
+            onPressed: onDeletePressed,
+            icon: const Icon(Icons.delete),
+          ),
+        ],
       ),
     );
   }

@@ -5,7 +5,7 @@ class DialogBox extends StatelessWidget {
   final controller;
   VoidCallback onSave;
   VoidCallback onCancel;
-  
+
   DialogBox({
     super.key,
     required this.controller,
@@ -16,6 +16,7 @@ class DialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      title: const Text('Add or Update Tasks'),
       backgroundColor: Colors.yellow[300],
       content: SizedBox(
         height: 120,
