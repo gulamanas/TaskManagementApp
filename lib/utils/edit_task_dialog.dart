@@ -27,10 +27,13 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Edit Task"),
+      title: const Text(
+        "Edit Task",
+      ),
       content: TextField(
         controller: taskTitleController,
         decoration: const InputDecoration(labelText: "Task Title"),
+        maxLines: null,
       ),
       actions: [
         ElevatedButton(

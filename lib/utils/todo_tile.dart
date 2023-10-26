@@ -20,35 +20,45 @@ class TodoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Checkbox(
-        value: isCompleted,
-        activeColor: Colors.black,
-        onChanged: (value) {
-          final tasksProvider =
-              Provider.of<TasksProvider>(context, listen: false);
-          tasksProvider.toggleTaskCompletion(taskId);
-        },
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-            decoration: isCompleted ? TextDecoration.lineThrough : null),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: onEditPressed,
-            icon: const Icon(Icons.edit),
-            color: Colors.blue[400],
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.yellow, borderRadius: BorderRadius.circular(10)),
+      margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: ListTile(
+        leading: Checkbox(
+          value: isCompleted,
+          activeColor: Colors.black,
+          onChanged: (value) {
+            final tasksProvider =
+                Provider.of<TasksProvider>(context, listen: false);
+            tasksProvider.toggleTaskCompletion(taskId);
+          },
+        ),
+        title: Text(
+          title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            decoration: isCompleted ? TextDecoration.lineThrough : null,
           ),
-          IconButton(
-            onPressed: onDeletePressed,
-            icon: const Icon(Icons.delete),
-            color: Colors.red[400],
-          ),
-        ],
+          textAlign: TextAlign.start,
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: onEditPressed,
+              icon: const Icon(Icons.edit),
+              color: Colors.blue[400],
+            ),
+            IconButton(
+              onPressed: onDeletePressed,
+              icon: const Icon(Icons.delete),
+              color: Colors.red[400],
+            ),
+          ],
+        ),
       ),
     );
   }
