@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_management_app/data/notes.dart';
-import 'package:task_management_app/providers/notes_provider.dart';
+import 'package:task_management_app/data/tasks.dart';
+import 'package:task_management_app/providers/tasks_provider.dart';
 import 'package:task_management_app/utils/create_task_dialog.dart';
 import 'package:task_management_app/utils/delete_task_dialog.dart';
 import 'package:task_management_app/utils/edit_task_dialog.dart';
@@ -19,39 +19,36 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notes App'),
+        title: const Text('TO DO'),
+        centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return const CreateTaskDialog();
-              }).then((newTaskTitle) {
+          createNewTask(context).then((newTaskTitle) {
             if (newTaskTitle != null) {
-              Provider.of<NotesProvider>(context, listen: false)
+              Provider.of<TasksProvider>(context, listen: false)
                   .createNewTask(newTaskTitle);
             }
           });
         },
         child: const Icon(Icons.add),
       ),
-      body: Consumer<NotesProvider>(
+      body: Consumer<TasksProvider>(
         builder: (context, value, child) {
-          final notes = value.notes;
+          final tasks = value.tasks;
           return ListView.builder(
-            itemCount: notes.length,
+            itemCount: tasks.length,
             itemBuilder: ((context, index) {
-              final note = notes[index];
+              final task = tasks[index];
               return TodoTile(
-                taskId: note.id,
-                isCompleted: note.completed,
-                title: note.title,
+                taskId: task.id,
+                isCompleted: task.completed,
+                title: task.title,
                 onEditPressed: () {
-                  updateTaskTitle(context, note);
+                  updateTaskTitle(context, task);
                 },
                 onDeletePressed: () {
-                  deleteTask(context, note);
+                  deleteTask(context, task);
                 },
               );
             }),
@@ -61,22 +58,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<dynamic> deleteTask(BuildContext context, Notes note) {
+  Future<dynamic> createNewTask(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
-        return DeleteTaskDialog(taskId: note.id);
+        return const CreateTaskDialog();
       },
     );
   }
 
-  Future<dynamic> updateTaskTitle(BuildContext context, Notes note) {
+  Future<dynamic> deleteTask(BuildContext context, Tasks task) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return DeleteTaskDialog(taskId: task.id);
+      },
+    );
+  }
+
+  Future<dynamic> updateTaskTitle(BuildContext context, Tasks task) {
     return showDialog(
       context: context,
       builder: (context) {
         return EditTaskDialog(
-          taskId: note.id,
-          currentTitle: note.title,
+          taskId: task.id,
+          currentTitle: task.title,
         );
       },
     );

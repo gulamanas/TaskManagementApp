@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_management_app/providers/notes_provider.dart';
+import 'package:task_management_app/providers/tasks_provider.dart';
 
 class DeleteTaskDialog extends StatelessWidget {
   final int taskId;
@@ -18,9 +18,9 @@ class DeleteTaskDialog extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            final notesProvider =
-                Provider.of<NotesProvider>(context, listen: false);
-            notesProvider.deleteTask(taskId);
+            final tasksProvider =
+                Provider.of<TasksProvider>(context, listen: false);
+            tasksProvider.deleteTask(taskId);
             Navigator.of(context).pop();
           },
           child: const Text('Yes'),

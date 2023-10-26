@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
-
-class Notes {
+class Tasks {
   int id;
   String title;
   bool completed;
 
-  Notes({required this.id, required this.title, required this.completed});
+  Tasks({required this.id, required this.title, required this.completed});
 
-  factory Notes.fromMap(Map<String, dynamic> map) {
-    return Notes(
+  factory Tasks.fromMap(Map<String, dynamic> map) {
+    return Tasks(
       id: map['id'] as int,
       title: map['title'] as String,
       completed: map['completed'] as bool,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_management_app/providers/notes_provider.dart';
+import 'package:task_management_app/providers/tasks_provider.dart';
 
 class EditTaskDialog extends StatefulWidget {
   final int taskId;
@@ -41,9 +41,9 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
           onPressed: () {
             final newTaskTitle = taskTitleController.text;
             if (newTaskTitle.isNotEmpty) {
-              final notesProvider =
-                  Provider.of<NotesProvider>(context, listen: false);
-              notesProvider.updateTask(widget.taskId, newTaskTitle);
+              final tasksProvider =
+                  Provider.of<TasksProvider>(context, listen: false);
+              tasksProvider.updateTask(widget.taskId, newTaskTitle);
               Navigator.of(context).pop();
             }
           },

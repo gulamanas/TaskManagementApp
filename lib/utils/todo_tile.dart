@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_management_app/providers/notes_provider.dart';
+import 'package:task_management_app/providers/tasks_provider.dart';
 
 class TodoTile extends StatelessWidget {
-  final taskId;
+  final int taskId;
   final bool isCompleted;
   final String title;
   final VoidCallback onEditPressed;
   final VoidCallback onDeletePressed;
 
-  TodoTile({
+  const TodoTile({
     super.key,
     required this.taskId,
     required this.isCompleted,
@@ -23,10 +23,11 @@ class TodoTile extends StatelessWidget {
     return ListTile(
       leading: Checkbox(
         value: isCompleted,
+        activeColor: Colors.black,
         onChanged: (value) {
-          final notesProvider =
-              Provider.of<NotesProvider>(context, listen: false);
-          notesProvider.toggleTaskCompletion(taskId);
+          final tasksProvider =
+              Provider.of<TasksProvider>(context, listen: false);
+          tasksProvider.toggleTaskCompletion(taskId);
         },
       ),
       title: Text(
@@ -40,10 +41,12 @@ class TodoTile extends StatelessWidget {
           IconButton(
             onPressed: onEditPressed,
             icon: const Icon(Icons.edit),
+            color: Colors.blue[400],
           ),
           IconButton(
             onPressed: onDeletePressed,
             icon: const Icon(Icons.delete),
+            color: Colors.red[400],
           ),
         ],
       ),
