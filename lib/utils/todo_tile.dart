@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
+import 'package:task_management_app/utils/priority_icon.dart';
 
 class TodoTile extends StatelessWidget {
   final int taskId;
   final bool isCompleted;
   final String title;
+  final int priority;
   final VoidCallback onEditPressed;
   final VoidCallback onDeletePressed;
 
@@ -16,50 +18,66 @@ class TodoTile extends StatelessWidget {
     required this.title,
     required this.onEditPressed,
     required this.onDeletePressed,
+    required this.priority,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.yellow, borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: ListTile(
-        leading: Checkbox(
-          value: isCompleted,
-          activeColor: Colors.black,
-          onChanged: (value) {
-            final tasksProvider =
-                Provider.of<TasksProvider>(context, listen: false);
-            tasksProvider.toggleTaskCompletion(taskId);
-          },
-        ),
-        title: Text(
-          title,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            decoration: isCompleted ? TextDecoration.lineThrough : null,
+    return Stack(children: [
+      Container(
+        decoration: BoxDecoration(
+            color: Colors.yellow, borderRadius: BorderRadius.circular(10)),
+        margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: ListTile(
+          leading: Checkbox(
+            value: isCompleted,
+            activeColor: Colors.black,
+            onChanged: (value) {
+              final tasksProvider =
+                  Provider.of<TasksProvider>(context, listen: false);
+              tasksProvider.toggleTaskCompletion(taskId);
+            },
           ),
-          textAlign: TextAlign.start,
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              onPressed: onEditPressed,
-              icon: const Icon(Icons.edit),
-              color: Colors.blue[400],
+          title: Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              decoration: isCompleted ? TextDecoration.lineThrough : null,
             ),
-            IconButton(
-              onPressed: onDeletePressed,
-              icon: const Icon(Icons.delete),
-              color: Colors.red[400],
-            ),
-          ],
+            textAlign: TextAlign.start,
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: onEditPressed,
+                icon: const Icon(Icons.edit),
+                color: Colors.blue[400],
+              ),
+              IconButton(
+                onPressed: onDeletePressed,
+                icon: const Icon(Icons.delete),
+                color: Colors.red[400],
+              ),
+            ],
+          ),
         ),
       ),
-    );
+      Positioned(
+        top: 5,
+        right: 5,
+        child: Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          // child: getPriorityIcon(priority),
+          child: Icon(Icons.flag),
+        ),
+      ),
+    ]);
   }
 }

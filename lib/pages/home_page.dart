@@ -5,6 +5,7 @@ import 'package:task_management_app/pages/finished_tasks_tab.dart';
 import 'package:task_management_app/pages/unfinished_tasks_tab.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
 import 'package:task_management_app/utils/create_task_dialog.dart';
+import 'package:task_management_app/utils/side_navigation_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,31 +30,40 @@ class _HomePageState extends State<HomePage> {
         title: const Text('TO DO'),
         centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          createNewTask(context).then((newTaskTitle) {
-            if (newTaskTitle != null) {
-              Provider.of<TasksProvider>(context, listen: false)
-                  .createNewTask(newTaskTitle);
-            }
-          });
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: addTaskButton(context),
       body: _tabs[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'All Tasks'),
-          BottomNavigationBarItem(icon: Icon(Icons.done), label: 'Finished'),
-          BottomNavigationBarItem(icon: Icon(Icons.close), label: 'Unfinished'),
-        ],
-        currentIndex: _currentIndex,
-        onTap: (value) {
-          setState(() {
-            _currentIndex = value;
-          });
-        },
-      ),
+      bottomNavigationBar: taskBottomNavigationBar(),
+      drawer: const SideNavigationDrawer(),
+    );
+  }
+
+  FloatingActionButton addTaskButton(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        createNewTask(context).then((newTaskTitle) {
+          if (newTaskTitle != null) {
+            Provider.of<TasksProvider>(context, listen: false)
+                .createNewTask(newTaskTitle);
+          }
+        });
+      },
+      child: const Icon(Icons.add),
+    );
+  }
+
+  BottomNavigationBar taskBottomNavigationBar() {
+    return BottomNavigationBar(
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.list), label: 'All Tasks'),
+        BottomNavigationBarItem(icon: Icon(Icons.done), label: 'Finished'),
+        BottomNavigationBarItem(icon: Icon(Icons.close), label: 'Unfinished'),
+      ],
+      currentIndex: _currentIndex,
+      onTap: (value) {
+        setState(() {
+          _currentIndex = value;
+        });
+      },
     );
   }
 
@@ -65,16 +75,4 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
-  // Future<dynamic> updateTaskTitle(BuildContext context, Tasks task) {
-  //   return showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return EditTaskDialog(
-  //         taskId: task.id,
-  //         currentTitle: task.title,
-  //       );
-  //     },
-  //   );
-  // }
 }

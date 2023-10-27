@@ -16,7 +16,12 @@ class TasksProvider with ChangeNotifier {
   List<Tasks> get tasks => _tasks;
 
   void createNewTask(String title) {
-    final newTasks = Tasks(id: _nextId, title: title, completed: false);
+    final newTasks = Tasks(
+      id: _nextId,
+      title: title,
+      completed: false,
+      priority: 0,
+    );
     _tasks.add(newTasks);
     _nextId++;
     _saveTasksToLocalStorage();

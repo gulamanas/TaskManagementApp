@@ -27,6 +27,7 @@ class FinishedTasksTab extends StatelessWidget {
                 taskId: task.id,
                 isCompleted: task.completed,
                 title: task.title,
+                priority: 0,
                 onEditPressed: () {
                   showUpdateTaskTitleDialog(context, task.id, task.title);
                 },
