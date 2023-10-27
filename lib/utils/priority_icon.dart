@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Icon getPriorityIcon(int priority) {
   switch (priority) {
-    case 1:
+    case 3:
       return const Icon(
         Icons.priority_high,
         color: Colors.red,
@@ -12,7 +12,7 @@ Icon getPriorityIcon(int priority) {
         Icons.priority_high,
         color: Colors.yellow,
       );
-    case 3:
+    case 1:
       return const Icon(
         Icons.low_priority,
         color: Colors.green,

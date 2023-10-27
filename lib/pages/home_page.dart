@@ -40,12 +40,12 @@ class _HomePageState extends State<HomePage> {
   FloatingActionButton addTaskButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        createNewTask(context).then((newTaskTitle) {
-          if (newTaskTitle != null) {
-            Provider.of<TasksProvider>(context, listen: false)
-                .createNewTask(newTaskTitle);
-          }
-        });
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const CreateTaskDialog();
+          },
+        );
       },
       child: const Icon(Icons.add),
     );
@@ -63,15 +63,6 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           _currentIndex = value;
         });
-      },
-    );
-  }
-
-  Future<dynamic> createNewTask(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return const CreateTaskDialog();
       },
     );
   }

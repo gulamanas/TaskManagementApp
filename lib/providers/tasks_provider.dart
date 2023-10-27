@@ -7,6 +7,7 @@ import 'package:task_management_app/data/tasks.dart';
 class TasksProvider with ChangeNotifier {
   List<Tasks> _tasks = [];
   int _nextId = 1;
+  int _priorityTag = 0;
   SharedPreferences? _prefs;
 
   TasksProvider() {
@@ -15,13 +16,14 @@ class TasksProvider with ChangeNotifier {
 
   List<Tasks> get tasks => _tasks;
 
-  void createNewTask(String title) {
+  void createNewTask(String title, int priority) {
     final newTasks = Tasks(
       id: _nextId,
       title: title,
       completed: false,
-      priority: 0,
+      priority: priority,
     );
+    _priorityTag = priority;
     _tasks.add(newTasks);
     _nextId++;
     _saveTasksToLocalStorage();
@@ -50,7 +52,6 @@ class TasksProvider with ChangeNotifier {
 
   void _loadTasksFromLocalStorage() async {
     _prefs = await SharedPreferences.getInstance();
-    // final tasksList = _prefs!.getStringList('tasks');
     final taskListAsJson = _prefs!.getStringList('tasks');
 
     if (taskListAsJson != null) {
@@ -60,6 +61,7 @@ class TasksProvider with ChangeNotifier {
           .map((map) => Tasks.fromMap(Map<String, dynamic>.from(map)))
           .toList();
       _nextId = _prefs!.getInt('nextId') ?? 1;
+      _priorityTag = _prefs!.getInt('priority') ?? 0;
       notifyListeners();
     }
   }
@@ -70,6 +72,7 @@ class TasksProvider with ChangeNotifier {
       final taskListAsJson = taskList.map((map) => json.encode(map)).toList();
       _prefs!.setStringList('tasks', taskListAsJson);
       _prefs!.setInt('nextId', _nextId);
+      _prefs!.setInt('priority', _priorityTag);
     }
   }
 }

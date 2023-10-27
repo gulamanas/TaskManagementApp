@@ -74,8 +74,8 @@ class TodoTile extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          // child: getPriorityIcon(priority),
-          child: Icon(Icons.flag),
+          child: getPriorityIcon(priority),
+          // child: Icon(Icons.flag),
         ),
       ),
     ]);
