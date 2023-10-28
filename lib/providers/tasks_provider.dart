@@ -50,6 +50,13 @@ class TasksProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updatePriorityTag(int id, int newPriority) {
+    final task = _tasks.firstWhere((task) => task.id == id);
+    task.priority = newPriority;
+    _saveTasksToLocalStorage();
+    notifyListeners();
+  }
+
   void _loadTasksFromLocalStorage() async {
     _prefs = await SharedPreferences.getInstance();
     final taskListAsJson = _prefs!.getStringList('tasks');
