@@ -10,6 +10,9 @@ Future<dynamic> showPriorityTagDialog(
       return AlertDialog(
         title: const Text("Update Priority"),
         content: DropdownButtonFormField(
+          decoration: const InputDecoration(
+            labelText: 'Priority',
+          ),
           value: priorityTag,
           items: const [
             DropdownMenuItem(

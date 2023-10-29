@@ -28,7 +28,9 @@ class TodoTile extends StatelessWidget {
     return Stack(children: [
       Container(
         decoration: BoxDecoration(
-            color: Colors.yellow, borderRadius: BorderRadius.circular(10)),
+          color: const Color.fromARGB(134, 179, 229, 252),
+          borderRadius: BorderRadius.circular(10),
+        ),
         margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: ListTile(
@@ -82,7 +84,7 @@ class TodoTile extends StatelessWidget {
             },
             child: Row(
               children: [
-               const Icon(
+                const Icon(
                   Icons.flag,
                   size: 16,
                 ),

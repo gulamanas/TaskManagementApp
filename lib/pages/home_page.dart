@@ -27,7 +27,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TO DO'),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          'TO DO',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       floatingActionButton: addTaskButton(context),
@@ -47,7 +51,10 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
-      child: const Icon(Icons.add),
+      child: const Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
     );
   }
 

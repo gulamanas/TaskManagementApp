@@ -4,9 +4,12 @@ class Tasks {
   bool completed;
   int priority;
 
-  // priority tags : 0 -> none, 1 -> low, 2 -> med, 3 -> high
-
-  Tasks({required this.id, required this.title, required this.completed, required this.priority});
+  Tasks({
+    required this.id,
+    required this.title,
+    required this.completed,
+    required this.priority,
+  });
 
   factory Tasks.fromMap(Map<String, dynamic> map) {
     return Tasks(

@@ -13,14 +13,19 @@ class CreateTaskDialog extends StatelessWidget {
     return AlertDialog(
       title: const Text("Create a New Task"),
       content: SizedBox(
-        height: 120,
+        height: 140,
         child: Column(
           children: [
             TextField(
               controller: taskTitleController,
-              decoration: const InputDecoration(labelText: "Task Title"),
+              decoration: const InputDecoration(
+                labelText: "Task Title",
+              ),
             ),
             DropdownButtonFormField(
+              decoration: const InputDecoration(
+                labelText: 'Priority',
+              ),
               value: selectedPriority,
               items: const [
                 DropdownMenuItem(
