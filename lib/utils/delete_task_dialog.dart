@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
+import 'package:task_management_app/utils/tex_widgets.dart';
 
 Future<dynamic> showDeleteConfirmationDialog(BuildContext context, int taskId) {
   return showDialog(
@@ -12,7 +13,7 @@ Future<dynamic> showDeleteConfirmationDialog(BuildContext context, int taskId) {
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('No'),
+            child: getElevatedButtonText('No'),
           ),
           ElevatedButton(
             onPressed: () {
@@ -21,7 +22,7 @@ Future<dynamic> showDeleteConfirmationDialog(BuildContext context, int taskId) {
               tasksProvider.deleteTask(taskId);
               Navigator.of(context).pop(true);
             },
-            child: const Text('Yes'),
+            child: getElevatedButtonText('Yes'),
           ),
         ],
       );

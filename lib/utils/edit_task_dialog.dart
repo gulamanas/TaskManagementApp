@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
+import 'package:task_management_app/utils/tex_widgets.dart';
 
 Future<dynamic> showUpdateTaskTitleDialog(
     BuildContext context, int taskId, String taskTitle) {
@@ -18,7 +19,7 @@ Future<dynamic> showUpdateTaskTitleDialog(
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: getElevatedButtonText('Cancel'),
           ),
           ElevatedButton(
             onPressed: () {
@@ -30,7 +31,7 @@ Future<dynamic> showUpdateTaskTitleDialog(
                 Navigator.of(context).pop(true);
               }
             },
-            child: const Text('Save'),
+            child: getElevatedButtonText('Save'),
           ),
         ],
       );

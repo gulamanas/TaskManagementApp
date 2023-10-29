@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
+import 'package:task_management_app/utils/tex_widgets.dart';
 
 class CreateTaskDialog extends StatelessWidget {
   const CreateTaskDialog({super.key});
@@ -57,7 +58,7 @@ class CreateTaskDialog extends StatelessWidget {
       actions: [
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: getElevatedButtonText('Cancel'),
         ),
         ElevatedButton(
           onPressed: () {
@@ -69,7 +70,7 @@ class CreateTaskDialog extends StatelessWidget {
               // Navigator.of(context).pop([newTaskTitle, selectedPriority]);
             }
           },
-          child: const Text('Create'),
+          child: getElevatedButtonText('Create'),
         ),
       ],
     );
