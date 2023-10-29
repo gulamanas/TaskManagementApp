@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
 import 'package:task_management_app/utils/priority_icon.dart';
 import 'package:task_management_app/utils/priority_tag_dialog.dart';
+import 'package:task_management_app/utils/priority_text.dart';
 
 class TodoTile extends StatelessWidget {
   final int taskId;
@@ -67,22 +68,28 @@ class TodoTile extends StatelessWidget {
         ),
       ),
       Positioned(
-        top: -5,
-        right: 5,
+        top: 5,
+        right: 10,
         child: Container(
-          // padding: const EdgeInsets.all(4),
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: IconButton(
-            icon: getPriorityIcon(priority),
-            onPressed: () {
-              print(priority);
+          child: GestureDetector(
+            onTap: () {
               showPriorityTagDialog(context, taskId, priority);
             },
+            child: Row(
+              children: [
+               const Icon(
+                  Icons.flag,
+                  size: 16,
+                ),
+                getPriorityText(priority),
+              ],
+            ),
           ),
-          // child: Icon(Icons.flag),
         ),
       ),
     ]);
