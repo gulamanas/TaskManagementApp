@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
-import 'package:task_management_app/utils/tex_widgets.dart';
+import 'package:task_management_app/utils/text_widgets.dart';
 
 Future<dynamic> showUpdateTaskTitleDialog(
     BuildContext context, int taskId, String taskTitle) {
