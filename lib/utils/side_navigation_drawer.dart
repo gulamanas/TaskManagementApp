@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_management_app/pages/category/category_page.dart';
 
 class SideNavigationDrawer extends StatelessWidget {
   const SideNavigationDrawer({super.key});
@@ -19,9 +20,17 @@ class SideNavigationDrawer extends StatelessWidget {
             accountEmail: Text('smithalex@email.com'),
           ),
           ListTile(
-            leading: const Icon(Icons.list),
-            title: const Text('Low Priority'),
-            onTap: () {},
+            leading: const Icon(Icons.category),
+            title: const Text('Category'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: ((context) {
+                    return const CategoryScreen();
+                  }),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.done),

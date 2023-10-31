@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:task_management_app/pages/all_tasks_tab.dart';
 import 'package:task_management_app/pages/finished_tasks_tab.dart';
 import 'package:task_management_app/pages/unfinished_tasks_tab.dart';
-import 'package:task_management_app/providers/tasks_provider.dart';
 import 'package:task_management_app/utils/create_task_dialog.dart';
 import 'package:task_management_app/utils/side_navigation_drawer.dart';
 
