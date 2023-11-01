@@ -17,18 +17,17 @@ class AllTasksTab extends StatelessWidget {
           itemCount: tasks.length,
           itemBuilder: ((context, index) {
             final task = tasks[index];
+            print(task.createdAt);
             return TodoTile(
               taskId: task.id,
               isCompleted: task.completed,
               title: task.title,
               priority: task.priority,
               onEditPressed: () {
-                // updateTaskTitle(context, task);
                 showUpdateTaskTitleDialog(context, task.id, task.title);
               },
               onDeletePressed: () {
                 showDeleteConfirmationDialog(context, task.id);
-                // deleteTask(context, task);
               },
             );
           }),

@@ -23,8 +23,8 @@ class TasksProvider with ChangeNotifier {
       completed: false,
       priority: priority,
       categoryId: 1,
-      createdAt: DateTime.now(),
-      dueDate: DateTime.now(),
+      createdAt: DateTime.now().toIso8601String(),
+      dueDate: DateTime.now().toIso8601String(),
     );
     _priorityTag = priority;
     _tasks.add(newTasks);

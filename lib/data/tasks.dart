@@ -4,8 +4,8 @@ class Tasks {
   bool completed;
   int priority;
   int categoryId;
-  DateTime createdAt;
-  DateTime dueDate;
+  String createdAt;
+  String dueDate;
 
   Tasks({
     required this.id,
@@ -24,8 +24,8 @@ class Tasks {
       completed: map['completed'] as bool,
       priority: map['priority'] as int,
       categoryId: map['categoryId'] ?? 0,
-      createdAt: map['createdAt'] ?? DateTime.now(),
-      dueDate: map['dueDate'] ?? DateTime.now(),
+      createdAt: map['createdAt'] ?? DateTime.now().toIso8601String(),
+      dueDate: map['dueDate'] ?? DateTime.now().toIso8601String(),
     );
   }
 

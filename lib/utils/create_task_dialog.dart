@@ -3,9 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:task_management_app/providers/tasks_provider.dart';
 import 'package:task_management_app/utils/text_widgets.dart';
 
-class CreateTaskDialog extends StatelessWidget {
+class CreateTaskDialog extends StatefulWidget {
   const CreateTaskDialog({super.key});
 
+  @override
+  State<CreateTaskDialog> createState() => _CreateTaskDialogState();
+}
+
+class _CreateTaskDialogState extends State<CreateTaskDialog> {
   @override
   Widget build(BuildContext context) {
     TextEditingController taskTitleController = TextEditingController();
@@ -14,7 +19,7 @@ class CreateTaskDialog extends StatelessWidget {
     return AlertDialog(
       title: const Text("Create a New Task"),
       content: SizedBox(
-        height: 140,
+        // height: 140,
         child: Column(
           children: [
             TextField(
